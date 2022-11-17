@@ -1,0 +1,2 @@
+# 특정 폴더 node_modules와 내부 파일 제외
+**/node_modules
