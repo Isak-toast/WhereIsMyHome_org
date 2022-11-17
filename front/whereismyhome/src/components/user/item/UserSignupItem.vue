@@ -3,7 +3,7 @@
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
       <b-form-group
         id="input-group-1"
-        label="이메일:"
+        label="�̸���:"
         label-for="input-1"
       >
         <b-form-input

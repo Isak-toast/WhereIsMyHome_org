@@ -34,7 +34,7 @@
   
   <script>
   // import moment from "moment";
-  import http from "@/api/http";
+  import http from "@/api/lib/http";
   
   export default {
     name: "BoardDetail",

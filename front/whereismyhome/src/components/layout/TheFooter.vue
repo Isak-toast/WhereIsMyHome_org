@@ -10,7 +10,7 @@
             </svg>
         </a>
     </div>
-    </footer>
+</footer>
 </template>
 
 <script>

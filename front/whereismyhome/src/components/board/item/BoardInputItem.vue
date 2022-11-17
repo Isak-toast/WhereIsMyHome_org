@@ -2,21 +2,21 @@
   <b-row class="mb-1">
     <b-col style="text-align: left">
       <b-form @submit="onSubmit" @reset="onReset">
-        <b-form-group id="userid-group" label="작성자:" label-for="userid" description="작성자를 입력하세요.">
+        <b-form-group id="nickname-group" label="작성자:" label-for="nickname" description="작성자를 입력하세요.">
           <b-form-input
-            id="userid"
+            id="nickname"
             :disabled="isUserid"
-            v-model="article.userid"
+            v-model="article.nickname"
             type="text"
             required
             placeholder="작성자 입력..."
           ></b-form-input>
         </b-form-group>
 
-        <b-form-group id="subject-group" label="제목:" label-for="subject" description="제목을 입력하세요.">
+        <b-form-group id="title-group" label="제목:" label-for="title" description="제목을 입력하세요.">
           <b-form-input
-            id="subject"
-            v-model="article.subject"
+            id="title"
+            v-model="article.title"
             type="text"
             required
             placeholder="제목 입력..."
@@ -42,16 +42,16 @@
 </template>
 
 <script>
-import http from "@/api/http";
+import http from "@/api/lib/http";
 
 export default {
   name: "BoardInputItem",
   data() {
     return {
       article: {
-        articleno: 0,
-        userid: "",
-        subject: "",
+        articleNo: 0,
+        nickname: "",
+        title: "",
         content: "",
       },
       isUserid: false,
@@ -62,10 +62,10 @@ export default {
   },
   created() {
     if (this.type === "modify") {
-      http.get(`/board/${this.$route.params.articleno}`).then(({ data }) => {
+      http.get(`/board/${this.$route.params.articleNo}`).then(({ data }) => {
         // this.article.articleno = data.article.articleno;
         // this.article.userid = data.article.userid;
-        // this.article.subject = data.article.subject;
+        // this.article.title = data.article.title;
         // this.article.content = data.article.content;
         this.article = data;
       });
@@ -78,8 +78,8 @@ export default {
 
       let err = true;
       let msg = "";
-      !this.article.userid && ((msg = "작성자 입력해주세요"), (err = false), this.$refs.userid.focus());
-      err && !this.article.subject && ((msg = "제목 입력해주세요"), (err = false), this.$refs.subject.focus());
+      !this.article.nickname && ((msg = "작성자 입력해주세요"), (err = false), this.$refs.nickname.focus());
+      err && !this.article.title && ((msg = "제목 입력해주세요"), (err = false), this.$refs.title.focus());
       err && !this.article.content && ((msg = "내용 입력해주세요"), (err = false), this.$refs.content.focus());
 
       if (!err) alert(msg);
@@ -87,16 +87,16 @@ export default {
     },
     onReset(event) {
       event.preventDefault();
-      this.article.articleno = 0;
-      this.article.subject = "";
+      this.article.articleNo = 0;
+      this.article.title = "";
       this.article.content = "";
       this.moveList();
     },
     registArticle() {
       http
         .post(`/board`, {
-          userid: this.article.userid,
-          subject: this.article.subject,
+          nickname: this.article.nickname,
+          title: this.article.title,
           content: this.article.content,
         })
         .then(({ data }) => {
@@ -111,9 +111,9 @@ export default {
     modifyArticle() {
       http
         .put(`/board`, {
-          articleno: this.article.articleno,
-          userid: this.article.userid,
-          subject: this.article.subject,
+          articleNo: this.article.articleNo,
+          nickname: this.article.nickname,
+          title: this.article.title,
           content: this.article.content,
         })
         .then(({ data }) => {

@@ -12,12 +12,12 @@
   </template>
   
   <script>
-  import http from "@/api/http";
+  import http from "@/api/lib/http";
   
   export default {
     name: "BoardDelete",
     created() {
-      http.delete(`/board/${this.$route.params.articleno}`).then(({ data }) => {
+      http.delete(`/board/${this.$route.params.articleNo}`).then(({ data }) => {
         let msg = "삭제 처리시 문제가 발생했습니다.";
         if (data === "success") {
           msg = "삭제가 완료되었습니다.";

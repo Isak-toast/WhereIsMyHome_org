@@ -25,8 +25,8 @@
   </template>
   
   <script>
-  import http from "@/api/http";
-  
+  import { listArticle } from "@/api/board";
+
   export default {
     name: "BoardList",
     data() {
@@ -35,18 +35,28 @@
         fields: [
           { key: "articleNo", label: "글번호", tdClass: "tdClass" },
           { key: "title", label: "제목", tdClass: "tdSubject" },
-          { key: "author", label: "작성자", tdClass: "tdClass" },
+          { key: "nickname", label: "작성자", tdClass: "tdClass" },
           { key: "registeredDate", label: "작성일", tdClass: "tdClass" },
           { key: "views", label: "조회수", tdClass: "tdClass" },
         ],
       };
     },
-    created() {
-      http.get(`/board`).then(({ data }) => {
-        console.log(data);
-        this.articles = data;
-      });
-    },
+  created() {
+      listArticle(
+        ({ data }) => {
+          // console.log(data)
+          this.articles = data;
+        },
+        (error) => {
+          alert(error);
+          // console.log(error);
+        }
+      );
+      // http.get(`/board`).then(({ data }) => {
+      //   console.log(data);
+      //   this.articles = data;
+      // });
+  },
     methods: {
       moveWrite() {
         this.$router.push({ name: "boardwrite" });

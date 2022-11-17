@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-import "@/api/vueBootstrap.js"; // 불러옴
+import "@/api/lib/vueBootstrap.js"; // 불러옴
 
 Vue.config.productionTip = false
 
