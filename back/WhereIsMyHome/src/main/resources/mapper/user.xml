@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.home.user.mapper.UserMapper">
+
+	<resultMap type="user" id="user">
+		<result column="user_id" property="userId" />
+		<result column="email" property="email" />
+		<result column="password" property="password" />
+		<result column="name" property="name" />
+		<result column="nickname" property="nickname" />
+		<result column="tel" property="tel" />
+	</resultMap>
+	
+	<insert id="signUp" parameterType="user">
+		insert into user(email, password, name, nickname, tel)
+		values(#{email}, #{password}, #{name}, #{nickname}, #{tel})
+	</insert>
+	
+	<select id="signIn" parameterType="map" resultMap="user">
+		select user_id, email, password, name, nickname, tel
+		from user
+		where email = #{email} and password = #{password}
+	</select>
+	
+	<select id="existsByEmail" parameterType="string" resultType="int">
+		select count(*) 
+		from user
+		where email = #{email};
+	</select>
+	
+	<select id="getUser" parameterType="string" resultMap="user">
+		select user_id, email, password, name, nickname, tel
+		from user
+		where email = #{email}
+	</select>
+	
+	<update id="updateUser" parameterType="map">
+		update user
+		set password = #{password}, nickname = #{nickname}, tel = #{tel}
+		where email = #{email}
+	</update>
+	
+	<delete id="deleteUser" parameterType="string">
+		delete from user
+		where email = #{email};
+	</delete>
+	
+</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.home.board.mapper.BoardMapper">
+
+	<resultMap type="board" id="board">
+		<result column="article_no" property="articleNo" />
+		<result column="title" property="title" />
+		<result column="content" property="content" />
+		<result column="nickname" property="nickname" />
+		<result column="views" property="views" />
+		<result column="registered_date" property="registeredDate" />
+		<result column="updated_date" property="updatedDate" />
+	</resultMap>
+
+	<insert id="createArticle" parameterType="board">
+		insert into board(title, content, nickname)
+		values(#{title}, #{content}, #{nickname})
+	</insert>
+
+	<select id="getArticle" parameterType="int" resultMap="board">
+		select article_no, title, content, nickname, views, registered_date, updated_date
+		from board
+		where article_no = #{articleNo}
+	</select>
+
+	<select id="getArticles" resultMap="board">
+		select article_no, title, content, nickname, views, registered_date, updated_date
+		from board
+		order by article_no desc
+	</select>
+	
+	<select id="existsByBoardNo" parameterType="int" resultType="int">
+		select count(*) 
+		from board
+		where article_no = #{articleNo}
+	</select>
+
+	<update id="updateViews" parameterType="board">
+		update board
+		set views = views + 1
+		where article_no = #{articleNo} 
+	</update>
+
+	<update id="updateArticle" parameterType="board">
+		update board
+		set title = #{title}, content = #{content}, updated_date = now()
+		where article_no = #{articleNo}
+	</update>
+
+	<delete id="deleteArticle" parameterType="int">
+		delete from board
+		where article_no = #{articleNo}
+	</delete>
+
+</mapper>

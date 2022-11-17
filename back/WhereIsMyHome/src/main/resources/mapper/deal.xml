@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.home.deal.mapper.DealMapper">
+
+
+	<select id="getSido" resultType="apt">
+		select code, name
+		from sidocode
+		order by code
+	</select>
+
+	<select id="getGugun" parameterType="string" resultType="apt">
+		select * 
+		from guguncode
+		where code like concat(#{sidoCode}, '%') 
+		and name is not null 
+		order by name
+	</select>
+
+	<select id="getDong" parameterType="string" resultType="apt">
+		select * 
+		from dongcode 
+		where code like concat(#{gugunCode}, '%') 
+		and name is not null 
+		order by name
+	</select>
+
+	<select id="getAptList" parameterType="map" resultType="aptInfo">
+		select * 
+		from (select * 
+				from dongcode d 
+			   inner join (select hi.aptCode, hi.apartmentName, hi.dongCode, hd.dealAmount, hd.area, hd.dealYear, hd.dealMonth, hd.dealDay 
+							 from houseinfo hi 
+							inner join housedeal hd on hi.aptCode = hd.aptCode
+						  ) as ht 
+				  on ht.dongCode = d.code
+		     ) as view 
+		where view.dongCode = #{dongCode}
+		and view.apartmentName like concat('%', #{aptText}, '%')
+		order by dealYear desc, dealMonth desc, dealDay desc
+	</select>
+</mapper>
