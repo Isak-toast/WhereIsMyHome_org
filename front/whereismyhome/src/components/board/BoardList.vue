@@ -23,8 +23,9 @@
       </b-row>
     </b-container>
   </template>
-  
+
   <script>
+  // import http from "@/api/lib/http";
   import { listArticle } from "@/api/board";
 
   export default {
@@ -44,7 +45,7 @@
   created() {
       listArticle(
         ({ data }) => {
-          // console.log(data)
+          console.log(data)
           this.articles = data;
         },
         (error) => {
@@ -70,7 +71,7 @@
     },
   };
   </script>
-  
+
   <style scope>
   .tdClass {
     width: 50px;
@@ -81,4 +82,3 @@
     text-align: left;
   }
   </style>
-  

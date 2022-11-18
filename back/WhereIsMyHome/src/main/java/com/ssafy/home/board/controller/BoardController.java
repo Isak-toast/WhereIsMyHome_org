@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/board")
 public class BoardController {
 
-	private final BoardService boardService = null;
+	private final BoardService boardService;
 
 	@PostMapping
 	public ResponseEntity<?> createArticle(@RequestBody Board board) {
