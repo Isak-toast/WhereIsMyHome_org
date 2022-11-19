@@ -1,10 +1,8 @@
-/<template>
-    <div>
-        <div class="kmap" ref="map" id="kmap">
-            <deal-search-bar></deal-search-bar>
-            <deal-apt-list></deal-apt-list>
-        </div>
-    </div>
+<template>
+    <b-col class="map-wrap">
+      <div class="kmap" ref="map">
+      </div>
+    </b-col>
     <!-- <b-container class="bv-example-row mt-3 text-center">
         <h3 class="underline-orange"><b-icon icon="house-fill"></b-icon> House Service</h3>
         <b-row>
@@ -24,18 +22,14 @@
 </template>
 
 <script>
-import DealSearchBar from "@/components/deal/DealSearchBar.vue";
-import DealAptList from "@/components/deal/DealAptList.vue"
 
 export default {
     name: "DealMap",
     components: {
-        DealSearchBar,
-        DealAptList,
     },
     mounted() {
         let kakao = window.kakao;
-        console.log(this.$refs.map); 
+        console.log(this.$refs.map);
 
         var container = this.$refs.map;
         var options = {
@@ -48,11 +42,17 @@ export default {
 }
 </script>
 
-<style>
-    .kmap {
-        position: fixed;
-        top: 120px;
+<style scoped>
+    .map-wrap{
+        margin: 0;
+        padding: 0;
+        width: calc(100% - 390px);
+        height: 100vh;
+    }
+    .map-wrap > .kmap {
+        position: absolute;
         width: 100%;
         height: 100vh;
+        margin: 0;
     }
 </style>

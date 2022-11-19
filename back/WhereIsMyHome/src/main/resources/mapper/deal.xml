@@ -28,17 +28,9 @@
 	</select>
 
 	<select id="getAptList" parameterType="map" resultType="aptInfo">
-		select * 
-		from (select * 
-				from dongcode d 
-			   inner join (select hi.aptCode, hi.apartmentName, hi.dongCode, hd.dealAmount, hd.area, hd.dealYear, hd.dealMonth, hd.dealDay 
-							 from houseinfo hi 
-							inner join housedeal hd on hi.aptCode = hd.aptCode
-						  ) as ht 
-				  on ht.dongCode = d.code
-		     ) as view 
-		where view.dongCode = #{dongCode}
-		and view.apartmentName like concat('%', #{aptText}, '%')
-		order by dealYear desc, dealMonth desc, dealDay desc
+		select hi.aptCode, sidoName, gugunName, name, code, buildYear, roadName, apartmentName, jibun, lat, lng, no, dealAmount, area, floor, dealYear, dealMonth, dealDay
+		from dongcode d, houseinfo hi, housedeal hd
+		where hd.aptCode = hi.aptCode and d.code = hi.dongCode
+		  and d.code = #{dong} and hi.apartmentName like concat('%', #{text}, '%');
 	</select>
 </mapper>

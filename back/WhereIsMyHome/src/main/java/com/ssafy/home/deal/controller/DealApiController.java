@@ -28,7 +28,7 @@ public class DealApiController {
 	// 아파트 정보 조회
 	@GetMapping("/deal")
 	public ResponseEntity<?> selectBtn(@RequestParam Map<String, String> map) {
-		map.put("aptText", ParameterCheck.nullToBlank(map.get("aptText")));
+		map.put("text", ParameterCheck.nullToBlank(map.get("text")));
 		System.out.println(map);
 //		System.out.println(map.get("aptText") == null);
 		try {
@@ -47,10 +47,10 @@ public class DealApiController {
 	// 지역 정보 조회
 	@GetMapping("/deal/{type}/{code}")
 	public ResponseEntity<?> selectDrop(@PathVariable String type, @PathVariable String code) {
-		System.out.println("들어와요???????");
-		if(code == null || code.equalsIgnoreCase("null")) {
-			System.out.println("널널하네~~");
-		}
+//		System.out.println("들어와요???????");
+//		if(code == null || code.equalsIgnoreCase("null")) {
+//			System.out.println("널널하네~~");
+//		}
 		try {
 			Search search = new Search();
 			search.setType(type);

@@ -1,6 +1,7 @@
 <template>
   <b-container>
-    <b-navbar toggleable="lg" type="dark" variant="faded" class="m-3">
+    <div class="navbar">
+    <b-navbar type="dark" variant="faded" class="m-3" sticky>
       <!-- navbar brand start -->
       <b-navbar-brand>
           <router-link :to="{ name: 'main' }">
@@ -58,7 +59,7 @@
             </b-dropdown-item>
 
             <b-dropdown-item>
-              <router-link :to="{ name: 'logout' }"> 
+              <router-link :to="{ name: 'logout' }">
                 <b-icon icon="key"></b-icon> 로그아웃
               </router-link>
             </b-dropdown-item>
@@ -90,6 +91,7 @@
       </b-collapse>
       <!-- nav-collapse end -->
     </b-navbar>
+    </div>
   </b-container>
 </template>
 
@@ -104,7 +106,7 @@ export default {
   methods: {
     logout() {
       this.$store.commit("LOGOUT")
-    },  
+    },
   },
   computed: {
     getLoginUser: function () {
@@ -121,5 +123,8 @@ export default {
 }
 a {
   color: black;
+}
+.navbar{
+  min-width: 900px;
 }
 </style>
