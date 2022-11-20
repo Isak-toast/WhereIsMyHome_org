@@ -14,7 +14,11 @@ const houseStore = {
     houses: [],
     house: null,
   },
-  getters: {},
+  getters: {
+    getAptList: function (state) {
+      return state.apts;
+    },
+  },
   mutations: {
     CLEAR_SIDO_LIST(state) {
       state.sidos = [{ value: null, text: "시/도" }];
