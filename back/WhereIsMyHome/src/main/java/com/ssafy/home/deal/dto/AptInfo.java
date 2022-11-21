@@ -21,7 +21,8 @@ public class AptInfo {
 	private String area;
 	private int buildYear;
 	private int floor;
-	private int dealYear;
-	private int dealMonth;
-	private int dealDay;
+//	private int dealYear;
+//	private int dealMonth;
+//	private int dealDay;
+	private String dateTime;
 }

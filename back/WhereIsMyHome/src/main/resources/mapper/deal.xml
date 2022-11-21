@@ -27,10 +27,26 @@
 		order by name
 	</select>
 
+<!-- 	<select id="getAptList" parameterType="map" resultType="aptInfo"> -->
+<!-- 		select hi.aptCode, sidoName, gugunName, name, code, buildYear, roadName, apartmentName, jibun, lat, lng, no, dealAmount, area, floor, dealYear, dealMonth, dealDay -->
+<!-- 		from dongcode d, houseinfo hi, housedeal hd -->
+<!-- 		where hd.aptCode = hi.aptCode and d.code = hi.dongCode -->
+<!-- 		  and d.code = #{dong} and hi.apartmentName like concat('%', #{text}, '%'); -->
+<!-- 	</select> -->
 	<select id="getAptList" parameterType="map" resultType="aptInfo">
-		select hi.aptCode, sidoName, gugunName, name, code, buildYear, roadName, apartmentName, jibun, lat, lng, no, dealAmount, area, floor, dealYear, dealMonth, dealDay
-		from dongcode d, houseinfo hi, housedeal hd
-		where hd.aptCode = hi.aptCode and d.code = hi.dongCode
-		  and d.code = #{dong} and hi.apartmentName like concat('%', #{text}, '%');
-	</select>
+		select aptCode, sidoName, gugunName, name, code, buildYear, roadName, apartmentName, jibun, lat, lng, no, dealAmount, area, floor, dateTime
+		from (
+			select hi.aptCode as aptCode, sidoName, gugunName, name, code, buildYear, roadName, apartmentName, jibun, lat, lng, no, dealAmount, area, floor, 
+					  concat(dealYear, '-', LPAD(dealMonth, 2, '0'), '-', LPAD(dealDay, 2, '0')) as datetime
+			from dongcode d, houseinfo hi, housedeal hd
+			where hd.aptCode = hi.aptCode and d.code = hi.dongCode
+			  and d.code = #{dong} and hi.apartmentName like concat('%', #{text}, '%')
+		      ) as homeview
+		where (aptCode, datetime) in (select hi.aptCode as aptCode, max(concat(dealYear, '-', LPAD(dealMonth, 2, '0'), '-', LPAD(dealDay, 2, '0'))) as dateTime
+										from dongcode d, houseinfo hi, housedeal hd
+										where hd.aptCode = hi.aptCode and d.code = hi.dongCode
+										  and d.code = #{dong} and hi.apartmentName like concat('%', #{text}, '%')
+										group by hi.aptCode);
+	</select>	
+	
 </mapper>

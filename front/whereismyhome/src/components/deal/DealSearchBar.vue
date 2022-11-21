@@ -145,7 +145,8 @@ export default {
   width: 390px;
   height: 100%;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .apt-list-wrap > .input-apt{
   width: 350px;

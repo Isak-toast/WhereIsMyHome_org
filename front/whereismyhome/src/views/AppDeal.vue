@@ -23,7 +23,7 @@ export default {
         position: relative;
         display: flex;
         width: 100%;
-        height: 100vh;
+        height: calc(100vh - 104px);
         margin: 0;
         overflow-y:hidden;
     }

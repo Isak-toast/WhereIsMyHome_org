@@ -13,10 +13,19 @@ const houseStore = {
     apt: null,
     houses: [],
     house: null,
+
+    map: null,
+    kakao: null,
+    marker: null,
+    mapLat: 35.850701,
+    mapLng: 128.570667,
   },
   getters: {
     getAptList: function (state) {
       return state.apts;
+    },
+    getMap: function (state) {
+      return state.map;
     },
   },
   mutations: {
@@ -64,6 +73,15 @@ const houseStore = {
         state.dongs.push({ value: dong.code, text: dong.name });
       });
     },
+    SET_KAKAO(state, kakao) {
+      state.kakao = kakao;
+    },
+    SET_KAKAO_MAP(state, map) {
+      state.map = map;
+    },
+    SET_KAKAO_MARKER(state, marker) {
+      state.marker = marker;
+    },
     SET_DETAIL_SIDO(state, sido) {
       state.sido = sido;
     },
@@ -87,7 +105,7 @@ const houseStore = {
     getSido: ({ commit }, type) => {
       const params = {
         type,
-      }
+      };
       house.sidoList(
         params,
         ({ data }) => {
@@ -101,7 +119,7 @@ const houseStore = {
       );
     },
     getGugun: ({ commit }, params) => {
-      console.log(params)
+      console.log(params);
       house.gugunList(
         params,
         ({ data }) => {
@@ -114,7 +132,7 @@ const houseStore = {
       );
     },
     getDong: ({ commit }, params) => {
-      console.log(params)
+      console.log(params);
       house.dongList(
         params,
         ({ data }) => {
@@ -130,13 +148,13 @@ const houseStore = {
       house.aptList(
         params,
         ({ data }) => {
-          console.log(data)
+          console.log(data);
           commit("SET_APT_LIST", data);
         },
         (error) => {
           console.log(error);
         }
-      )
+      );
     },
     getHouseList: ({ commit }, gugunCode) => {
       const SERVICE_KEY = process.env.VUE_APP_APT_DEAL_API_KEY;

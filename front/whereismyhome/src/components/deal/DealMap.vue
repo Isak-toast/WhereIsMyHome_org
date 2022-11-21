@@ -1,29 +1,17 @@
 <template>
   <b-col class="map-wrap">
-    <div class="kmap" ref="map"></div>
-    <button class="mapBtn" @click="setBounds()">지도범위 재설정</button>
+    <div class="kmap" ref="map">
+      <button class="zoom-in-btn" @click="zoomIn()">+</button>
+      <button class="zoom-out-btn" @click="zoomOut()">-</button>
+    </div>
+
+    <span id="maplevel"></span>
   </b-col>
-  <!-- <b-container class="bv-example-row mt-3 text-center">
-        <h3 class="underline-orange"><b-icon icon="house-fill"></b-icon> House Service</h3>
-        <b-row>
-      <b-col>
-        <deal-search-bar></deal-search-bar>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col cols="6">
-        <deal-map></deal-map>
-      </b-col>
-      <b-col cols="2">
-        <deeal-apt-list></deeal-apt-list>
-      </b-col>
-    </b-row>
-  </b-container> -->
 </template>
 
 <script>
 import { mapState, mapGetters, mapMutations } from "vuex";
-import marker from "@/assets/home.png"
+import marker from "@/assets/apt_marker.png";
 
 const houseStore = "houseStore";
 
@@ -33,12 +21,14 @@ export default {
     return {
       kakao: null,
       map: null,
+      marker: null,
       mapLat: 35.850701,
       mapLng: 128.570667,
-      marker: null,
-    }
+    };
   },
   mounted() {
+    console.log(this);
+    console.log(this.$store.state.houseStore);
     this.kakao = window.kakao;
 
     var container = this.$refs.map;
@@ -49,13 +39,17 @@ export default {
     this.map = new this.kakao.maps.Map(container, options);
     console.log(this.map);
     //마커 이미지의 이미지 크기 입니다
-    var imageSize = new this.kakao.maps.Size(35, 35);
-      // // 마커 이미지를 생성합니다
+    var imageSize = new this.kakao.maps.Size(50, 50);
+    // // 마커 이미지를 생성합니다
     this.marker = new this.kakao.maps.MarkerImage(marker, imageSize);
   },
   computed: {
     ...mapState(houseStore, ["apts"]),
-
+  },
+  watch: {
+    apts: function () {
+      this.setBounds();
+    },
   },
   methods: {
     ...mapGetters(houseStore, ["getAptList"]),
@@ -65,10 +59,10 @@ export default {
       const apts = this.getAptList();
       console.log(apts);
       var points = [];
-      for (i = 0; i < apts.length; i++){
+      for (i = 0; i < apts.length; i++) {
         points.push({
           title: apts[i].apartmentName,
-          latlng: new this.kakao.maps.LatLng(apts[i].lat, apts[i].lng)
+          latlng: new this.kakao.maps.LatLng(apts[i].lat, apts[i].lng),
         });
       }
       // const set = new Set(points);
@@ -79,20 +73,21 @@ export default {
 
         var i, marker;
         for (i = 0; i < points.length; i++) {
-            // 배열의 좌표들이 잘 보이게 마커를 지도에 추가합니다
-            marker = new this.kakao.maps.Marker(
-              {
-                position: points[i].latlng,
-                title: points[i].title,
-                image: this.marker
-              });
-            marker.setMap(this.map);
+          // 배열의 좌표들이 잘 보이게 마커를 지도에 추가합니다
+          marker = new this.kakao.maps.Marker({
+            position: points[i].latlng,
+            title: points[i].title,
+            image: this.marker,
+          });
+          marker.setMap(this.map);
 
-            // LatLngBounds 객체에 좌표를 추가합니다
-            bounds.extend(points[i].latlng);
-          }
-          this.map.setBounds(bounds);
+          // LatLngBounds 객체에 좌표를 추가합니다
+          bounds.extend(points[i].latlng);
+        }
+        this.map.setBounds(bounds);
       }
+
+      this.getInfo();
     },
     setCenter(mapLat, maptLng) {
       // 이동할 위도 경도 위치를 생성합니다
@@ -105,28 +100,117 @@ export default {
       var moveLatLon = new this.kakao.maps.LatLng(mapLat, maptLng);
       // 지도 중심을 부드럽게 이동시킵니다
       // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+      console.log("이동");
       this.map.panTo(moveLatLon);
     },
-  }
-}
+    zoomIn() {
+      // 현재 지도의 레벨을 얻어옵니다
+      var level = this.map.getLevel();
+
+      // 지도를 1레벨 내립니다 (지도가 확대됩니다)
+      this.map.setLevel(level - 1);
+
+      // 지도 레벨을 표시합니다
+      this.displayLevel();
+    },
+    zoomOut() {
+      // 현재 지도의 레벨을 얻어옵니다
+      var level = this.map.getLevel();
+
+      // 지도를 1레벨 올립니다 (지도가 축소됩니다)
+      this.map.setLevel(level + 1);
+
+      // 지도 레벨을 표시합니다
+      this.displayLevel();
+    },
+    displayLevel() {
+      console.log("현재 지도 레벨은 " + this.map.getLevel() + " 레벨 입니다.");
+    },
+    getInfo() {
+      // 지도의 현재 중심좌표를 얻어옵니다
+      var center = this.map.getCenter();
+
+      // 지도의 현재 레벨을 얻어옵니다
+      var level = this.map.getLevel();
+
+      // 지도타입을 얻어옵니다
+      var mapTypeId = this.map.getMapTypeId();
+
+      // 지도의 현재 영역을 얻어옵니다
+      var bounds = this.map.getBounds();
+
+      // 영역의 남서쪽 좌표를 얻어옵니다
+      var swLatLng = bounds.getSouthWest();
+
+      // 영역의 북동쪽 좌표를 얻어옵니다
+      var neLatLng = bounds.getNorthEast();
+
+      // 영역정보를 문자열로 얻어옵니다. ((남,서), (북,동)) 형식입니다
+      var boundsStr = bounds.toString();
+
+      var message = "지도 중심좌표는 위도 " + center.getLat() + ", <br>";
+      message += "경도 " + center.getLng() + " 이고 <br>";
+      message += "지도 레벨은 " + level + " 입니다 <br> <br>";
+      message += "지도 타입은 " + mapTypeId + " 이고 <br> ";
+      message +=
+        "지도의 남서쪽 좌표는 " +
+        swLatLng.getLat() +
+        ", " +
+        swLatLng.getLng() +
+        " 이고 <br>";
+      message +=
+        "북동쪽 좌표는 " +
+        neLatLng.getLat() +
+        ", " +
+        neLatLng.getLng() +
+        " 입니다";
+      message += "박스 영역 좌표는 " + boundsStr + "입니다.";
+
+      this.panTo(swLatLng.getLat(), swLatLng.getLng());
+      // 개발자도구를 통해 직접 message 내용을 확인해 보세요.
+      console.log(message);
+    },
+  },
+};
 </script>
 
 <style scoped>
+* {
+  margin: 0;
+  padding: 0;
+}
 .map-wrap {
   margin: 0;
   padding: 0;
   width: calc(100% - 390px);
-  height: 100vh;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
 }
 
-.map-wrap>.kmap {
-  position: absolute;
+.map-wrap > .kmap {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   margin: 0;
 }
-.mapBtn{
-  position: sticky;
-  z-index: 3;
+.kmap > .zoom-in-btn {
+  position: absolute;
+  z-index: 2;
+  border-radius: 20%;
+  width: 20px;
+  height: 20px;
+  border: solid skyblue 1px;
+  bottom: 30px;
+  right: 10px;
+}
+.kmap > .zoom-out-btn {
+  position: absolute;
+  z-index: 2;
+  border-radius: 20%;
+  width: 20px;
+  height: 20px;
+  border: solid skyblue 1px;
+  bottom: 10px;
+  right: 10px;
 }
 </style>

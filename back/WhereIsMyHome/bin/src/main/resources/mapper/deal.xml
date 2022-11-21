@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.home.deal.mapper.DealMapper">
+
+
+	<select id="getSido" resultType="apt">
+		select code, name
+		from sidocode
+		order by code
+	</select>
+
+	<select id="getGugun" parameterType="string" resultType="apt">
+		select * 
+		from guguncode
+		where code like concat(#{sidoCode}, '%') 
+		and name is not null 
+		order by name
+	</select>
+
+	<select id="getDong" parameterType="string" resultType="apt">
+		select * 
+		from dongcode 
+		where code like concat(#{gugunCode}, '%') 
+		and name is not null 
+		order by name
+	</select>
+
+	<select id="getAptList" parameterType="map" resultType="aptInfo">
+		select hi.aptCode, sidoName, gugunName, name, code, buildYear, roadName, apartmentName, jibun, lat, lng, no, dealAmount, area, floor, dealYear, dealMonth, dealDay
+		from dongcode d, houseinfo hi, housedeal hd
+		where hd.aptCode = hi.aptCode and d.code = hi.dongCode
+		  and d.code = #{dong} and hi.apartmentName like concat('%', #{text}, '%');
+	</select>
+</mapper>
