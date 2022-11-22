@@ -38,8 +38,22 @@ export default {
     };
     this.map = new this.kakao.maps.Map(container, options);
     console.log(this.map);
+    // 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성합니다
+    var mapTypeControl = new this.kakao.maps.MapTypeControl();
+
+    // 지도에 컨트롤을 추가해야 지도위에 표시됩니다
+    // kakao.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 TOPRIGHT는 오른쪽 위를 의미합니다
+    this.map.addControl(
+      mapTypeControl,
+      this.kakao.maps.ControlPosition.TOPRIGHT
+    );
+
+    // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
+    var zoomControl = new this.kakao.maps.ZoomControl();
+    this.map.addControl(zoomControl, this.kakao.maps.ControlPosition.RIGHT);
+
     //마커 이미지의 이미지 크기 입니다
-    var imageSize = new this.kakao.maps.Size(50, 50);
+    var imageSize = new this.kakao.maps.Size(60, 60);
     // // 마커 이미지를 생성합니다
     this.marker = new this.kakao.maps.MarkerImage(marker, imageSize);
   },
@@ -86,7 +100,7 @@ export default {
         }
         this.map.setBounds(bounds);
       }
-
+      this.CREATE_APT_LIST(); // 아파트 배열 비우기
       this.getInfo();
     },
     setCenter(mapLat, maptLng) {
@@ -166,7 +180,7 @@ export default {
         " 입니다";
       message += "박스 영역 좌표는 " + boundsStr + "입니다.";
 
-      this.panTo(swLatLng.getLat(), swLatLng.getLng());
+      // this.panTo(swLatLng.getLat(), swLatLng.getLng());
       // 개발자도구를 통해 직접 message 내용을 확인해 보세요.
       console.log(message);
     },
