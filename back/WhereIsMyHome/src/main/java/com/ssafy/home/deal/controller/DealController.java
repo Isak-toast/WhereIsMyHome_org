@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.home.deal.dto.Apt;
+import com.ssafy.home.deal.dto.AptDetail;
 import com.ssafy.home.deal.dto.AptInfo;
 import com.ssafy.home.deal.dto.Search;
 import com.ssafy.home.deal.service.DealService;
@@ -38,6 +39,23 @@ public class DealController {
 			List<AptInfo> list = dealService.getAptList(map);
 			if (list != null) {
 				return new ResponseEntity<List<AptInfo>>(list, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return exceptionHandling(e);
+		}
+	}
+	
+	// 아파트 상세 정보 조회
+	@GetMapping("/detail")
+	public ResponseEntity<?> getAptDetail(@RequestParam String aptCode) {
+			System.out.println(aptCode);
+		try {
+			List<AptDetail> detailList = dealService.getAptDetail(aptCode);
+			if (detailList != null) {
+				return new ResponseEntity<List<AptDetail>>(detailList, HttpStatus.OK);
 			} else {
 				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 			}

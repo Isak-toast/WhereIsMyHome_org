@@ -20,10 +20,15 @@ function aptList(params, success, fail) {
   api.get(`/deal`, { params: params }).then(success).catch(fail);
 }
 
+function aptDetail(params, success, fail) {
+  api.get(`/deal/detail`, { params: params }).then(success).catch(fail);
+}
+
 function houseList(params, success, fail) {
   house.get(``, { params: params }).then(success).catch(fail);
 }
 
 
-export { sidoList, gugunList, dongList, aptList, houseList };
+
+export { sidoList, gugunList, dongList, aptList, aptDetail, houseList };
 

@@ -52,6 +52,8 @@ const houseStore = {
     },
     CLEAR_APT_LIST(state) {
       state.apts = [];
+    },
+    CLEAR_APT_DETAIL(state) {
       state.apt = null;
     },
     CLEAR_HOUSE_LIST(state) {
@@ -93,6 +95,9 @@ const houseStore = {
     },
     SET_APT_LIST(state, apts) {
       state.apts = apts;
+    },
+    SET_APT_DETAIL(state, apt) {
+      state.apt = apt;
     },
     SET_HOUSE_LIST(state, houses) {
       state.houses = houses;
@@ -150,6 +155,18 @@ const houseStore = {
         ({ data }) => {
           console.log(data);
           commit("SET_APT_LIST", data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    getAptDetail: ({commit}, params) => {
+      house.aptDetail(
+        params,
+        ({ data }) => {
+          console.log(data);
+          commit("SET_APT_DETAIL", data);
         },
         (error) => {
           console.log(error);

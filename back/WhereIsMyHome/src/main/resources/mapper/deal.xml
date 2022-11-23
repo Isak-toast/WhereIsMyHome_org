@@ -47,6 +47,14 @@
 										where hd.aptCode = hi.aptCode and d.code = hi.dongCode
 										  and d.code = #{dong} and hi.apartmentName like concat('%', #{text}, '%')
 										group by hi.aptCode);
-	</select>	
+	</select>
+	
+	<select id="getAptDetail" parameterType="string" resultType="aptDetail">
+	select hi.aptCode as aptCode, sidoName, gugunName, name, code, buildYear, roadName, apartmentName, jibun, lat, lng, no, dealAmount, area, floor, 
+		dealYear, dealMonth, dealDay
+		from dongcode d, houseinfo hi, housedeal hd
+		where hd.aptCode = hi.aptCode and d.code = hi.dongCode
+	    	  and hd.aptCode = ${aptCode};
+	</select>
 	
 </mapper>

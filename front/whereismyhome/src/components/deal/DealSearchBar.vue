@@ -3,7 +3,7 @@
     <deal-detail
       v-if="open"
       :apart-name="clickedAptName"
-      :type="clickedAptCode"
+      :code="clickedAptCode"
       @close="open = false"
     />
 
@@ -42,7 +42,12 @@
       <b-container>
         <div class="apt-list" v-show="apts.length != 0">
           <!-- <div class="item type1" onclick="openBuilding('apt',{{ value.code }}, {{ value.apartmentName }},'37.541218711','127.14817456');"> -->
-          <div class="item type1" v-for="(value, index) in apts" :key="index">
+          <div
+            class="item type1"
+            @click="selectApt(value)"
+            v-for="(value, index) in apts"
+            :key="index"
+          >
             <p class="title">
               {{ value.apartmentName }}
             </p>
@@ -171,6 +176,12 @@ export default {
     },
     clickApt(aptInfo) {
       console.log(aptInfo);
+    },
+    selectApt(aptInfo) {
+      console.log(aptInfo);
+      this.clickedAptName = aptInfo.apartmentName;
+      this.clickedAptCode = aptInfo.aptCode;
+      this.open = true; // 상세 컴포넌트 열기
     },
   },
 

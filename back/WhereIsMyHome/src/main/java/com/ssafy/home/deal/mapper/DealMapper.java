@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.ssafy.home.deal.dto.Apt;
+import com.ssafy.home.deal.dto.AptDetail;
 import com.ssafy.home.deal.dto.AptInfo;
 
 @Mapper
@@ -17,4 +18,6 @@ public interface DealMapper {
 	public List<Apt> getDong(String gugunCode) throws Exception;
 
 	public List<AptInfo> getAptList(Map<String, String> map) throws Exception;
+
+	public List<AptDetail> getAptDetail(String aptCode) throws Exception;
 }

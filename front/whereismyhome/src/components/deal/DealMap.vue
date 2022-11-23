@@ -65,42 +65,14 @@ export default {
   watch: {
     apts: function () {
       // this.test();
+      console.log("아파트 변경")
+      console.log(this.apts);
       this.setBounds();
     },
   },
   methods: {
     ...mapGetters(houseStore, ["getAptList"]),
     ...mapMutations(houseStore, ["CLEAR_APT_LIST"]),
-    // test() {
-    //   var content =
-    //     '<div id="controlCustomOverlay"><img src = "test.com/test.img"></div>';
-    //   var customOverlay = new this.kakao.maps.CustomOverlay({
-    //     map: this.map,
-    //     position: new this.kakao.maps.LatLng(this.lat, this.lng),
-    //     content: content,
-    //   }); // 일단 이렇게 생성을 해준 뒤
-
-    //   // content 상위 div 찾기
-    //   var contentUpperSection = document
-    //     .querySelector("#controlCustomOverlay")
-    //     .parent("div");
-    //   console.log(this);
-    //   console.log(contentUpperSection);
-    //   document.SelectQuery(".controlOverlay").mouseover(function () {
-    //     document.SelectQuery(this).parent("div").css("z-index", "100");
-    //   });
-    //   document.SelectQuery(".controlOverlay").mouseleave(function () {
-    //     document.SelectQuery(this).parent("div").css("z-index", "1");
-    //   });
-    //   map.setCenter(coords); //지도의 중심좌표
-    //   customOverlays.push(customOverlay); // 생성된 커스텀오버레이를 배열에 담아줍니다.
-
-    //   this.kakao.maps.event.addListener(marker, "click", function () {
-    //     // 마커에 클릭이벤트를 등록합니다
-    //     console.log(this);
-    //     customOverlay.setMap(this.map);
-    //   });
-    // },
     setBounds() {
       // 버튼을 클릭하면 아래 배열의 좌표들이 모두 보이게 지도 범위를 재설정합니다
       const apts = this.getAptList();
