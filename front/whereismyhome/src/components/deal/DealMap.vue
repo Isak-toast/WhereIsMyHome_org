@@ -4,7 +4,6 @@
       <button class="zoom-in-btn" @click="zoomIn()">+</button>
       <button class="zoom-out-btn" @click="zoomOut()">-</button>
     </div>
-
     <span id="maplevel"></span>
   </b-col>
 </template>
@@ -12,6 +11,7 @@
 <script>
 import { mapState, mapGetters, mapMutations } from "vuex";
 import marker from "@/assets/apt_marker.png";
+import img from "@/assets/ssafy_logo.png";
 
 const houseStore = "houseStore";
 
@@ -22,8 +22,10 @@ export default {
       kakao: null,
       map: null,
       marker: null,
+      markers: [],
       mapLat: 35.850701,
       mapLng: 128.570667,
+      img: img,
     };
   },
   mounted() {
@@ -62,30 +64,78 @@ export default {
   },
   watch: {
     apts: function () {
+      // this.test();
       this.setBounds();
     },
   },
   methods: {
     ...mapGetters(houseStore, ["getAptList"]),
     ...mapMutations(houseStore, ["CLEAR_APT_LIST"]),
+    // test() {
+    //   var content =
+    //     '<div id="controlCustomOverlay"><img src = "test.com/test.img"></div>';
+    //   var customOverlay = new this.kakao.maps.CustomOverlay({
+    //     map: this.map,
+    //     position: new this.kakao.maps.LatLng(this.lat, this.lng),
+    //     content: content,
+    //   }); // 일단 이렇게 생성을 해준 뒤
+
+    //   // content 상위 div 찾기
+    //   var contentUpperSection = document
+    //     .querySelector("#controlCustomOverlay")
+    //     .parent("div");
+    //   console.log(this);
+    //   console.log(contentUpperSection);
+    //   document.SelectQuery(".controlOverlay").mouseover(function () {
+    //     document.SelectQuery(this).parent("div").css("z-index", "100");
+    //   });
+    //   document.SelectQuery(".controlOverlay").mouseleave(function () {
+    //     document.SelectQuery(this).parent("div").css("z-index", "1");
+    //   });
+    //   map.setCenter(coords); //지도의 중심좌표
+    //   customOverlays.push(customOverlay); // 생성된 커스텀오버레이를 배열에 담아줍니다.
+
+    //   this.kakao.maps.event.addListener(marker, "click", function () {
+    //     // 마커에 클릭이벤트를 등록합니다
+    //     console.log(this);
+    //     customOverlay.setMap(this.map);
+    //   });
+    // },
     setBounds() {
       // 버튼을 클릭하면 아래 배열의 좌표들이 모두 보이게 지도 범위를 재설정합니다
       const apts = this.getAptList();
       console.log(apts);
+      if (apts.length === 0) {
+        console.log("아피트 실거래 데이터가 없습니다.");
+        return;
+      }
+      // 아파트 데이터와 오버레이로 부터 맵 객체를 만든다.
       var points = [];
+      var contents = this.getCustomOverlay();
+      console.log(contents);
+      this.mapLat = apts[0].lat;
+      this.mapLng = apts[0].lng;
       for (i = 0; i < apts.length; i++) {
         points.push({
+          content: contents,
           title: apts[i].apartmentName,
           latlng: new this.kakao.maps.LatLng(apts[i].lat, apts[i].lng),
         });
       }
+      // 현재 표시되어 있는 marker들을 map에서 없앤다.
+      this.removeMarkers();
       // const set = new Set(points);
       console.log(points);
+      // this.removeMarker();
       if (this.apts.length != 0) {
         // 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
-        var bounds = new this.kakao.maps.LatLngBounds();
-
+        // var bounds = new this.kakao.maps.LatLngBounds();
         var i, marker;
+        var overlay = new this.kakao.maps.CustomOverlay({ zIndex: 1 }),
+          //생성할 element
+          contentNode = document.createElement("div");
+        //마커정보
+
         for (i = 0; i < points.length; i++) {
           // 배열의 좌표들이 잘 보이게 마커를 지도에 추가합니다
           marker = new this.kakao.maps.Marker({
@@ -94,27 +144,131 @@ export default {
             image: this.marker,
           });
           marker.setMap(this.map);
+          this.markers.push(marker);
+          console.log(marker.getPosition());
+          var place = {
+            x: marker.getPosition().La,
+            y: marker.getPosition().Ma,
+          };
 
-          // LatLngBounds 객체에 좌표를 추가합니다
-          bounds.extend(points[i].latlng);
+          this.kakao.maps.event.addListener(marker, "mouseover", () => {
+            var content =
+              " var content = '<div >' " +
+              '   <a class="title" href="' +
+              '" target="_blank" title="' +
+              '">' +
+              "</a>";
+
+            content +=
+              '    <span class="tel">' +
+              "</span>" +
+              "</div>" +
+              '<div class="after"></div>';
+            contentNode.innerHTML += content;
+            console.log(contentNode);
+            console.log(overlay);
+            overlay.setPosition(new this.kakao.maps.LatLng(place.x, place.y));
+            overlay.setMap(this.map);
+          });
+
+          overlay.setContent(contentNode);
+          //   // LatLngBounds 객체에 좌표를 추가합니다
+          //   bounds.extend(points[i].latlng);
+          //   console.log(marker.getPosition());
+          //   // 마커에 표시할 인포윈도우를 생성합니다
+          //   // var overlay = new this.kakao.maps.CustomOverlay({
+          //   //   content: points[i].content, // 인포윈도우에 표시할 내용
+          //   //   map: this.map,
+          //   //   position: marker.getPosition(),
+          //   // });
+          //   (function(marker) {
+          //         kakao.maps.event.addListener(marker, 'click', function() {
+          //             displayPlaceInfo(place);
+          //         });
+          //     })(marker, places[i]);
+
+          //   // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
+          //   // 이벤트 리스너로는 클로저를 만들어 등록합니다
+          //   // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+          //   var vueThis = this;
+          //   this.kakao.maps.event.addListener(marker, "click", () => {
+          //     console.log(this);
+          //     console.log(vueThis);
+          //     console.log(marker);
+          //     overlay.setMap(this.map);
+          //   });
+          //   this.kakao.maps.event.addListener(marker, "mouseout", () => {
+          //     console.log(marker);
+          //   });
+          // }
+          // this.map.setBounds(bounds);
         }
-        this.map.setBounds(bounds);
+        overlay.setContent(contentNode);
+        // var overlay = new this.kakao.maps.CustomOverlay({
+        //       //생성할 element
+        //   content: document.createElement("div"),
+        //       //마커정보
+        //     markers: markers
+        // });
+
+        // this.panTo(this.mapLat, this.mapLng);
+        // this.getInfo();
       }
-      this.CREATE_APT_LIST(); // 아파트 배열 비우기
-      this.getInfo();
     },
-    setCenter(mapLat, maptLng) {
+    makeOverListener(map, marker, overlay) {
+      return function () {
+        // infowindow.open(map, marker);
+        marker.addListener("mouseover", function () {
+          overlay.setMap(map);
+        });
+      };
+    },
+    makeOutListener(overlay) {
+      return function () {
+        // infowindow.close();
+        marker.addListener("mouseout", function () {
+          overlay.setMap(null);
+        });
+      };
+    },
+    getCustomOverlay() {
+      return `<div class="overlay">
+            <div class="info">
+                <div class="title">
+                    카카오 스페이스닷원
+               </div>
+                <div class="body">
+                    <div class="img">
+                        <img src="${this.img}" width="73" height="70">
+                   </div>
+                    <div class="desc">
+                        <div class="ellipsis">제주특별자치도 제주시 첨단로 242</div>
+                        <div class="jibun ellipsis">(우) 63309 (지번) 영평동 2181</div>
+                   </div>
+               </div>
+           </div>
+        </div>`;
+    },
+    removeMarkers() {
+      for (var i = 0; i < this.markers.length; i++) {
+        this.markers[i].setMap(null);
+      }
+    },
+    setCenter(mapLat, mapLng) {
+      if (mapLat == null || mapLng == null) return;
       // 이동할 위도 경도 위치를 생성합니다
-      var moveLatLon = new this.kakao.maps.LatLng(mapLat, maptLng);
+      var moveLatLon = new this.kakao.maps.LatLng(mapLat, mapLng);
+      this.map.setLevel(4); // 레벨 변경
       // 지도 중심을 이동 시킵니다
       this.map.setCenter(moveLatLon);
     },
-    panTo(mapLat, maptLng) {
+    panTo(mapLat, mapLng) {
+      if (mapLat == null || mapLng == null) return;
       // 이동할 위도 경도 위치를 생성합니다
-      var moveLatLon = new this.kakao.maps.LatLng(mapLat, maptLng);
+      var moveLatLon = new this.kakao.maps.LatLng(mapLat, mapLng);
+      this.map.setLevel(4); // 레벨 변경
       // 지도 중심을 부드럽게 이동시킵니다
       // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
-      console.log("이동");
       this.map.panTo(moveLatLon);
     },
     zoomIn() {
@@ -188,7 +342,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 * {
   margin: 0;
   padding: 0;
@@ -227,4 +381,144 @@ export default {
   bottom: 10px;
   right: 10px;
 }
+
+.overlay {
+  position: absolute;
+  left: 0;
+  bottom: 40px;
+  width: 288px;
+  height: 132px;
+  margin-left: -144px;
+  text-align: left;
+  overflow: hidden;
+  font-size: 12px;
+  font-family: "Malgun Gothic", dotum, "돋움", sans-serif;
+  line-height: 1.5;
+}
+.overlay * {
+  padding: 0;
+  margin: 0;
+}
+.overlay .info {
+  width: 286px;
+  height: 120px;
+  border-radius: 5px;
+  border-bottom: 2px solid #ccc;
+  border-right: 1px solid #ccc;
+  overflow: hidden;
+  background: #fff;
+}
+.overlay .info:nth-child(1) {
+  border: 0;
+  box-shadow: 0px 1px 2px #888;
+}
+.info .title {
+  padding: 5px 0 0 10px;
+  height: 30px;
+  background: #eee;
+  border-bottom: 1px solid #ddd;
+  font-size: 18px;
+  font-weight: bold;
+}
+.info .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #888;
+  width: 17px;
+  height: 17px;
+  background: url("@/assets/apt.png");
+}
+.info .close:hover {
+  cursor: pointer;
+}
+.info .body {
+  position: relative;
+  overflow: hidden;
+}
+.info .desc {
+  position: relative;
+  margin: 13px 0 0 90px;
+  height: 75px;
+}
+.desc .ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.desc .jibun {
+  font-size: 11px;
+  color: #888;
+  margin-top: -2px;
+}
+.info .img {
+  position: absolute;
+  top: 6px;
+  left: 5px;
+  width: 73px;
+  height: 71px;
+  border: 1px solid #ddd;
+  color: #888;
+  overflow: hidden;
+}
+.info:after {
+  content: "";
+  position: absolute;
+  margin-left: -12px;
+  left: 50%;
+  bottom: 0;
+  width: 22px;
+  height: 12px;
+  background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png");
+}
+.info .link {
+  color: #5085bb;
+}
+// .overlay {
+//   position: absolute;
+//   left: 0;
+//   bottom: 40px;
+//   width: 2808px;
+//   height: 132px;
+//   margin-left: -144px;
+//   text-align: left;
+//   overflow: hidden;
+//   font-size: 12px;
+//   font-family: "Malgun Gothic", dotum, "돋움", sans-serif;
+//   line-height: 1.5;
+// }
+
+// .overlay > * {
+//   margin: 0;
+//   padding: 0;
+// }
+
+// .overlay > .info:nth-child(1) {
+//   border: 0;
+//   box-shadow: 0px 1px 2px #888;
+// }
+
+// .overlay > .info {
+//   width: 286px;
+//   height: 120px;
+//   border-radius: 5px;
+//   border-bottom: 2px solid #ccc;
+//   border-right: 1px solid #ccc;
+//   overflow: hidden;
+//   background: #fff;
+// }
+
+// .overlay > .title {
+//   padding: 5px 0 0 10px;
+//   height: 30px;
+//   background: #eee;
+//   border-bottom: 1px solid #ddd;
+//   font-size: 18px;
+//   font-weight: bold;
+// }
+
+// .overlay > .info > .body {
+//   position: relative;
+//   overflow: hidden;
+// }
 </style>
