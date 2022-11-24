@@ -32,7 +32,7 @@ public class BoardServiceImpl implements BoardService {
 	 * 게시글 상세 조회
 	 * 
 	 * @param boardNo
-	 * @return
+	 * @return board
 	 */
 	@Override
 	public Board getArticle(int articleNo) {
@@ -47,7 +47,7 @@ public class BoardServiceImpl implements BoardService {
 	/**
 	 * 게시글 목록 조회
 	 * 
-	 * @return
+	 * @return List<Board>
 	 */
 	@Override
 	public List<Board> getArticles() {

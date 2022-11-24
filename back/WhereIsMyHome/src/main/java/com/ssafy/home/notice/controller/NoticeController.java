@@ -1,52 +1,56 @@
 package com.ssafy.home.notice.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ssafy.home.notice.dto.Notice;
 import com.ssafy.home.notice.service.NoticeService;
 
-@Controller
+import lombok.RequiredArgsConstructor;
+
+@CrossOrigin
+@RequiredArgsConstructor
+@RestController
 @RequestMapping("/notice")
 public class NoticeController {
-	private NoticeService noticeService;
+	private final NoticeService noticeService;
 
-	public NoticeController(NoticeService noticeService) {
-		this.noticeService = noticeService;
+	@PostMapping
+	public ResponseEntity<?> createNotice(@RequestBody Notice notice) {
+		noticeService.createNotice(notice);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
-	@GetMapping("/list")
-	public String list(Model model) {
-		try {
-			model.addAttribute("articles", noticeService.getArticles());
-		} catch (Exception e) {
-			model.addAttribute("msg", "글목록 얻기 중 에러발생!!!");
-		}
-		return "notice/list";
+	@GetMapping
+	public ResponseEntity<?> getNotices() {
+		return new ResponseEntity<List<Notice>>(noticeService.getNotices(), HttpStatus.OK);
 	}
 
-	@GetMapping("/detail")
-	public String detail(String no, Model model) {
-		try {
-			model.addAttribute("article", noticeService.getArticle(no));
-			noticeService.updateViews(no);
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("msg", "글목록 얻기 중 에러발생!!!");
-		}
-		return "notice/detail";
-	}
-	
-	@GetMapping("/edit")
-	public String edit(String no, Model model) {
-		try {
-			model.addAttribute("article", noticeService.getArticle(no));
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("msg", "글목록 얻기 중 에러발생!!!");
-		}
-		return "notice/edit";
+	@GetMapping("/{noticeNo}")
+	public ResponseEntity<?> getNotice(@PathVariable int noticeNo) {
+		return new ResponseEntity<Notice>(noticeService.getNotice(noticeNo), HttpStatus.OK);
 	}
 
+	@PutMapping
+	public ResponseEntity<?> updateNotice(@RequestBody Notice notice) {
+		noticeService.updateArticle(notice);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+
+	@DeleteMapping("/{noticeNo}")
+	public ResponseEntity<?> deleteArticle(@PathVariable int noticeNo) {
+		noticeService.deleteNotice(noticeNo);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 }

@@ -45,13 +45,12 @@ public class BoardController {
 
 	@PutMapping
 	public ResponseEntity<?> updateArticle(@RequestBody Board board) {
-		System.out.println(board.getArticleNo());
 		boardService.updateArticle(board);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{articleNo}")
-	public ResponseEntity<?> delete(@PathVariable int articleNo) {
+	public ResponseEntity<?> deleteArticle(@PathVariable int articleNo) {
 		boardService.deleteArticle(articleNo);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}

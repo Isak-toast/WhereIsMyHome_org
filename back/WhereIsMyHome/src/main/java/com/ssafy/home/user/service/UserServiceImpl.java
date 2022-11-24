@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserService {
 		if (isExistent(email)) {
 			throw new RuntimeException("이미 가입된 이메일입니다.");
 		}
+		user.setRole("user");
 		userMapper.signUp(user);
 	}
 

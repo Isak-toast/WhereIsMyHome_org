@@ -6,10 +6,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Notice {
-	private int no;
+	private int noticeNo;
 	private String title;
 	private String content;
-	private String author;
-	private	int views;
-	private String registerTime;
+	private String nickname;
+	private int views;
+	private String registeredDate;
+	private String updatedDate;
 }

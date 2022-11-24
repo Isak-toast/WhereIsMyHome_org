@@ -5,15 +5,46 @@ import java.util.List;
 import com.ssafy.home.notice.dto.Notice;
 
 public interface NoticeService {
-	int writeArticle(Notice notice) throws Exception;
+	/**
+	 * 공지사항 작성
+	 * 
+	 * @param board
+	 */
+	void createNotice(Notice notice);
 
-	List<Notice> getArticles() throws Exception;
+	/**
+	 * 공지사항 상세 조회
+	 * 
+	 * @param boardNo
+	 * @return
+	 */
+	Notice getNotice(int noticeNo);
 
-	Notice getArticle(String no) throws Exception;
+	/**
+	 * 공지사항 목록 조회
+	 * 
+	 * @return 공지사항 목록
+	 */
+	List<Notice> getNotices();
 
-	void updateViews(String no) throws Exception;
+	/**
+	 * 조회수 증가
+	 * 
+	 * @param noticeNo
+	 */
+	void updateViews(int noticeNo);
 
-	void modifyArticle(Notice notice) throws Exception;
+	/**
+	 * 공지사항 수정
+	 * 
+	 * @param notice
+	 */
+	void updateArticle(Notice notice);
 
-	void deleteArticle(String no) throws Exception;
+	/**
+	 * 공지사항 삭제
+	 * 
+	 * @param noticeNo
+	 */
+	void deleteNotice(int noticeNo);
 }

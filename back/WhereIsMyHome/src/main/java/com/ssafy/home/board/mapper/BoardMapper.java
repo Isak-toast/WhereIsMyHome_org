@@ -58,5 +58,4 @@ public interface BoardMapper {
 	 * @param boardNo
 	 */
 	void deleteArticle(int articleNo);
-
 }

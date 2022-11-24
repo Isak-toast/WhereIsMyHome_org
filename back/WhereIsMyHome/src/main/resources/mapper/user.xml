@@ -11,6 +11,7 @@
 		<result column="name" property="name" />
 		<result column="nickname" property="nickname" />
 		<result column="tel" property="tel" />
+		<result column="role" property="role" />
 	</resultMap>
 	
 	<insert id="signUp" parameterType="user">
@@ -19,7 +20,7 @@
 	</insert>
 	
 	<select id="signIn" parameterType="map" resultMap="user">
-		select user_id, email, password, name, nickname, tel
+		select user_id, email, password, name, nickname, tel, role
 		from user
 		where email = #{email} and password = #{password}
 	</select>
@@ -31,7 +32,7 @@
 	</select>
 	
 	<select id="getUser" parameterType="string" resultMap="user">
-		select user_id, email, password, name, nickname, tel
+		select user_id, email, password, name, nickname, tel, role
 		from user
 		where email = #{email}
 	</select>

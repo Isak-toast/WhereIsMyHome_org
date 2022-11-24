@@ -4,46 +4,54 @@
 
 <mapper namespace="com.ssafy.home.notice.mapper.NoticeMapper">
 
-    <resultMap type="notice" id="notice">
-        <result column="no" property="no" />
-        <result column="title" property="title" />
-        <result column="content" property="content" />
-        <result column="author" property="author" />
-        <result column="views" property="views" />
-        <result column="register_time" property="registerTime" />
-    </resultMap>
+	<resultMap type="notice" id="notice">
+		<result column="notice_no" property="noticeNo" />
+		<result column="title" property="title" />
+		<result column="content" property="content" />
+		<result column="nickname" property="nickname" />
+		<result column="views" property="views" />
+		<result column="registered_date" property="registeredDate" />
+		<result column="updated_date" property="updatedDate" />
+	</resultMap>
 
-    <insert id="writeArticle" parameterType="notice">
-        insert into notice(title, content, author)
-		values(#{title}, #{content}, #{author}) 
-    </insert>
+	<insert id="createNotice" parameterType="notice">
+		insert into notice(title, content, nickname)
+		values(#{title}, #{content}, #{nickname})
+	</insert>
 
-	<select id="getArticle" parameterType="string" resultMap="notice">
-		select no, title, content, author, views, register_time
+	<select id="getNotice" parameterType="int" resultMap="notice">
+		select notice_no, title, content, nickname, views, registered_date, updated_date
 		from notice
-		where no = #{no}	
+		where notice_no = #{noticeNo}
 	</select>
 
-	<select id="getArticles" resultMap="notice">
-		select no, title, content, author, views, register_time
+	<select id="getNotices" resultMap="notice">
+		select notice_no, title, content, nickname, views, registered_date, updated_date
 		from notice
+		order by notice_no desc
 	</select>
-
-	<update id="modifyArticle" parameterType="notice">
-		update notice
-		set title = #{title}, content = #{content}
-		where no = #{no}
-	</update>
 	
-	<update id="updateViews" parameterType="string">
+	<select id="existsByNoticeNo" parameterType="int" resultType="int">
+		select count(*) 
+		from notice
+		where notice_no = #{noticeNo}
+	</select>
+
+	<update id="updateViews" parameterType="notice">
 		update notice
 		set views = views + 1
-		where no = #{no}
+		where notice_no = #{noticeNo} 
 	</update>
 
-	<delete id="deleteArticle" parameterType="string">
+	<update id="updateNotice" parameterType="notice">
+		update notice
+		set title = #{title}, content = #{content}, updated_date = now()
+		where notice_no = #{noticeNo}
+	</update>
+
+	<delete id="deleteNotice" parameterType="int">
 		delete from notice
-		where no = #{no}
+		where notice_no = #{noticeNo}
 	</delete>
 
 </mapper>

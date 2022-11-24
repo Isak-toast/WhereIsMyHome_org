@@ -43,20 +43,20 @@
         <div class="apt-list" v-show="apts.length != 0">
           <!-- <div class="item type1" onclick="openBuilding('apt',{{ value.code }}, {{ value.apartmentName }},'37.541218711','127.14817456');"> -->
           <div
-            class="item type1"
+            class="apt-item type1"
             @click="selectApt(value)"
             v-for="(value, index) in apts"
             :key="index"
           >
-            <p class="title">
+            <p class="apt-title">
               {{ value.apartmentName }}
             </p>
-            <p class="info">
+            <p class="apt-info">
               <span>건축년도 : {{ value.buildYear }}년</span
               ><span>평형 : {{ value.area }}㎡</span
               ><span>{{ value.floor }}층</span>
             </p>
-            <p class="addr">
+            <p class="apt-addr">
               {{ value.sidoName }} {{ value.gugunName }} {{ value.name }}
               {{ value.jibun }}
             </p>
@@ -251,34 +251,34 @@ export default {
   overflow-y: auto;
   text-align: start;
 }
-.item:hover {
+.apt-item:hover {
   background: #c6e8f2;
-  .title {
+  .apt-title {
     text-decoration: underline black;
     mix-blend-mode: darken;
   }
 }
-.apt-list > .item {
+.apt-list > .apt-item {
   padding: 14px 0 14px 16px;
   border-bottom: 1px solid #e3e3e3;
 }
-.apt-list > .item > .title {
+.apt-list > .apt-item > .apt-title {
   font-weight: 700;
   font-size: 15px;
 }
-.apt-list > .item > .title {
+.apt-list > .apt-item > .apt-title {
   font-weight: 700;
   font-size: 15px;
 }
-.apt-list > .item > .info {
+.apt-list > .apt-item > .apt-info {
   padding-top: 5px;
   white-space: nowrap;
   overflow: hidden;
 }
-.apt-list > .item > .info > span:first-child {
+.apt-list > .apt-item > .apt-info > span:first-child {
   padding-left: 0;
 }
-.apt-list > .item > .info > span {
+.apt-list > .apt-item > .apt-info > span {
   display: inline;
   position: relative;
   font-size: 13px;
@@ -286,7 +286,7 @@ export default {
   color: #333;
   letter-spacing: -0.04em;
 }
-.apt-list > .item > .addr {
+.apt-list > .apt-item > .apt-addr {
   padding-top: 1px;
   font-size: 12px;
 }

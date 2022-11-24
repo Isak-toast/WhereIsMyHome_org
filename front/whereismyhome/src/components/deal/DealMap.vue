@@ -98,94 +98,66 @@ export default {
       this.removeMarkers();
       // const set = new Set(points);
       console.log(points);
-      // this.removeMarker();
-      if (this.apts.length != 0) {
-        // 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
-        // var bounds = new this.kakao.maps.LatLngBounds();
-        var i, marker;
-        var overlay = new this.kakao.maps.CustomOverlay({ zIndex: 1 }),
-          //생성할 element
-          contentNode = document.createElement("div");
-        //마커정보
+      // 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
+      var bounds = new this.kakao.maps.LatLngBounds();
+      var i, marker;
+      //생성할 element
 
-        for (i = 0; i < points.length; i++) {
-          // 배열의 좌표들이 잘 보이게 마커를 지도에 추가합니다
-          marker = new this.kakao.maps.Marker({
-            position: points[i].latlng,
-            title: points[i].title,
-            image: this.marker,
-          });
-          marker.setMap(this.map);
-          this.markers.push(marker);
-          // console.log(marker.getPosition());
-          var place = {
-            x: marker.getPosition().La,
-            y: marker.getPosition().Ma,
-          };
-
-          this.kakao.maps.event.addListener(marker, "mouseover", () => {
-            var content =
-              " var content = '<div >' " +
-              '   <a class="title" href="' +
-              '" target="_blank" title="' +
-              '">' +
-              "</a>";
-
-            content +=
-              '    <span class="tel">' +
-              "</span>" +
-              "</div>" +
-              '<div class="after"></div>';
-            contentNode.innerHTML += content;
-            console.log(contentNode);
-            console.log(overlay);
-            overlay.setPosition(new this.kakao.maps.LatLng(place.x, place.y));
-            overlay.setMap(this.map);
-          });
-
-          overlay.setContent(contentNode);
-          //   // LatLngBounds 객체에 좌표를 추가합니다
-          //   bounds.extend(points[i].latlng);
-          //   console.log(marker.getPosition());
-          //   // 마커에 표시할 인포윈도우를 생성합니다
-          //   // var overlay = new this.kakao.maps.CustomOverlay({
-          //   //   content: points[i].content, // 인포윈도우에 표시할 내용
-          //   //   map: this.map,
-          //   //   position: marker.getPosition(),
-          //   // });
-          //   (function(marker) {
-          //         kakao.maps.event.addListener(marker, 'click', function() {
-          //             displayPlaceInfo(place);
-          //         });
-          //     })(marker, places[i]);
-
-          //   // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
-          //   // 이벤트 리스너로는 클로저를 만들어 등록합니다
-          //   // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
-          //   var vueThis = this;
-          //   this.kakao.maps.event.addListener(marker, "click", () => {
-          //     console.log(this);
-          //     console.log(vueThis);
-          //     console.log(marker);
-          //     overlay.setMap(this.map);
-          //   });
-          //   this.kakao.maps.event.addListener(marker, "mouseout", () => {
-          //     console.log(marker);
-          //   });
-          // }
-          // this.map.setBounds(bounds);
-        }
-        overlay.setContent(contentNode);
-        // var overlay = new this.kakao.maps.CustomOverlay({
-        //       //생성할 element
-        //   content: document.createElement("div"),
-        //       //마커정보
-        //     markers: markers
-        // });
-
-        // this.panTo(this.mapLat, this.mapLng);
-        // this.getInfo();
+      for (i = 0; i < points.length; i++) {
+        // 배열의 좌표들이 잘 보이게 마커를 지도에 추가합니다
+        marker = new this.kakao.maps.Marker({
+          position: points[i].latlng,
+          title: points[i].title,
+          image: this.marker,
+        });
+        marker.setMap(this.map);
+        this.markers.push(marker);
+        // console.log(marker.getPosition());
+        bounds.extend(points[i].latlng);
       }
+      this.map.setBounds(bounds);
+      this.getInfo();
+      // this.kakao.maps.event.addListener(marker, "mouseover", () => {
+      //   var content =
+      //     " var content = '<div >' " +
+      //     '   <a class="title" href="' +
+      //     '" target="_blank" title="' +
+      //     '">' +
+      //     "</a>";
+
+      //   content +=
+      //     '    <span class="tel">' +
+      //     "</span>" +
+      //     "</div>" +
+      //     '<div class="after"></div>';
+      //   contentNode.innerHTML += content;
+      //   console.log(contentNode);
+      //   console.log(overlay);
+      //   overlay.setPosition(new this.kakao.maps.LatLng(place.x, place.y));
+      //   overlay.setMap(this.map);
+      // });
+
+      // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
+      // 이벤트 리스너로는 클로저를 만들어 등록합니다
+      // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+      // var vueThis = this;
+      // this.kakao.maps.event.addListener(marker, "click", () => {
+      //   console.log(this);
+      //   console.log(vueThis);
+      //   console.log(marker);
+      //   overlay.setMap(this.map);
+      // });
+      // this.kakao.maps.event.addListener(marker, "mouseout", () => {
+      //   console.log(marker);
+      // });
+      // var overlay = new this.kakao.maps.CustomOverlay({
+      //       //생성할 element
+      //   content: document.createElement("div"),
+      //       //마커정보
+      //     markers: markers
+      // });
+
+      // this.panTo(this.mapLat, this.mapLng);
     },
     makeOverListener(map, marker, overlay) {
       return function () {
