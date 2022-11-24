@@ -4,11 +4,13 @@ import router from './router'
 import store from './store'
 
 import "@/api/lib/vueBootstrap.js"; // 불러옴
+import vuetify from './plugins/vuetify'
 
 Vue.config.productionTip = false
 
 new Vue({
   router,
   store,
+  vuetify,
   render: h => h(App)
 }).$mount('#app')

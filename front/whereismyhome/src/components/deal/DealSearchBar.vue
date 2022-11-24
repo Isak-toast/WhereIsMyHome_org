@@ -222,6 +222,7 @@ export default {
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
+  background: #fff;
 }
 .apt-list-wrap > .input-apt {
   width: 350px;
