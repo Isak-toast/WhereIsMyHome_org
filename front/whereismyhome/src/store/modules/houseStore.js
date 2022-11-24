@@ -11,6 +11,7 @@ const houseStore = {
     dong: "동/읍",
     apts: [],
     apt: null,
+    aptDetails: [],
     houses: [],
     house: null,
 
@@ -53,8 +54,11 @@ const houseStore = {
     CLEAR_APT_LIST(state) {
       state.apts = [];
     },
-    CLEAR_APT_DETAIL(state) {
+    CLEAR_APT_NAME(state) {
       state.apt = null;
+    },
+    CLEAR_APT_DETAIL(state) {
+      state.aptDetails = [];
     },
     CLEAR_HOUSE_LIST(state) {
       state.houses = [];
@@ -96,7 +100,10 @@ const houseStore = {
     SET_APT_LIST(state, apts) {
       state.apts = apts;
     },
-    SET_APT_DETAIL(state, apt) {
+    SET_APT_DETAIL(state, aptDetails) {
+      state.aptDetails = aptDetails;
+    },
+    SET_APT_NAME(state, apt) {
       state.apt = apt;
     },
     SET_HOUSE_LIST(state, houses) {
@@ -161,10 +168,11 @@ const houseStore = {
         }
       );
     },
-    getAptDetail: ({commit}, params) => {
+    getAptDetail: ({ commit }, params) => {
       house.aptDetail(
         params,
         ({ data }) => {
+          console.log("데이터 변경");
           console.log(data);
           commit("SET_APT_DETAIL", data);
         },

@@ -1,7 +1,7 @@
 <template>
   <div class="apt-list-wrap">
     <deal-detail
-      v-if="open"
+      v-if="open && aptDetails.length != 0"
       :apart-name="clickedAptName"
       :code="clickedAptCode"
       @close="open = false"
@@ -121,6 +121,7 @@ export default {
       "gugun",
       "dong",
       "apts",
+      "aptDetails",
     ]),
 
     // sidos() {
@@ -135,12 +136,19 @@ export default {
     this.getSido("sido");
   },
   methods: {
-    ...mapActions(houseStore, ["getSido", "getGugun", "getDong", "getAptList"]),
+    ...mapActions(houseStore, [
+      "getSido",
+      "getGugun",
+      "getDong",
+      "getAptList",
+      "getAptDetail",
+    ]),
     ...mapMutations(houseStore, [
       "CLEAR_SIDO_LIST",
       "CLEAR_GUGUN_LIST",
       "CLEAR_DONG_LIST",
       "CLEAR_APT_LIST",
+      "CLEAR_APT_DETAIL",
     ]),
     // sidoList() {
     //   this.getSido();
@@ -178,9 +186,12 @@ export default {
       console.log(aptInfo);
     },
     selectApt(aptInfo) {
+      this.CLEAR_APT_DETAIL();
       console.log(aptInfo);
       this.clickedAptName = aptInfo.apartmentName;
-      this.clickedAptCode = aptInfo.aptCode;
+      // console.log("보냈다~");
+      this.getAptDetail({ aptCode: aptInfo.aptCode });
+      // console.log("적용 완료");
       this.open = true; // 상세 컴포넌트 열기
     },
   },

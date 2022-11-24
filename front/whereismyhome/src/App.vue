@@ -35,5 +35,4 @@ a.router-link-exact-active {
 a.router-link-exact-active:hover {
   text-decoration: none;
 }
-
 </style>

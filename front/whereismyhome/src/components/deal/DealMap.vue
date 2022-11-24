@@ -65,7 +65,7 @@ export default {
   watch: {
     apts: function () {
       // this.test();
-      console.log("아파트 변경")
+      console.log("아파트 변경");
       console.log(this.apts);
       this.setBounds();
     },
@@ -117,7 +117,7 @@ export default {
           });
           marker.setMap(this.map);
           this.markers.push(marker);
-          console.log(marker.getPosition());
+          // console.log(marker.getPosition());
           var place = {
             x: marker.getPosition().La,
             y: marker.getPosition().Ma,

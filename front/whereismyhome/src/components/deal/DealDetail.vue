@@ -22,10 +22,7 @@
           <span id="chart_info_m" class="co1">매매 130,000 / 1건</span>
           <span id="chart_info_j" class="co2">전세 거래내역 없음</span>
         </p>
-        <div style="width: 300px; height: 300px">
-          <!--차트가 그려질 부분-->
-          <canvas id="myChart"></canvas>
-        </div>
+        <deal-chart :aptDetails="aptDetails"></deal-chart>
         <div class="slider_year_wrap" style="margin-top: 0">
           <p>
             <span id="date_start">06년 1월</span> ~
@@ -51,19 +48,19 @@
               </div>
             </div>
           </div>
+
           <table class="tbl_graph">
             <tbody>
               <tr>
-                <td style="width: 12.5%">06년</td>
-                <td style="width: 25%">10년</td>
-                <td style="width: 25%">14년</td>
-                <td style="width: 25%">18년</td>
-                <td style="width: 12.5%">21년</td>
+                <td style="width: 25%"></td>
+                <td style="width: 12.5%"></td>
+                <td style="width: 25%"></td>
+                <td style="width: 25%"></td>
+                <td style="width: 12.5%"></td>
               </tr>
             </tbody>
           </table>
         </div>
-
         <div class="table_view mt15" style="padding-bottom: 25px">
           <div
             class="tooltip_history"
@@ -87,227 +84,34 @@
                 <tr>
                   <th scope="col">계약</th>
                   <th scope="col">일</th>
-                  <th scope="col">경과</th>
                   <th scope="col">체결가격</th>
-                  <th scope="col">타입</th>
+                  <th scope="col">평수(㎡)</th>
                   <th scope="col">거래 동층</th>
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  style=""
-                  onclick="clickPrice(this,20402255,1777,1200399,1209412,'4억 5,000','/30','104동','21층','22.1010')"
-                >
-                  <td class="date2"><span class="mm">22.10</span></td>
-                  <td class=""><span class="dd">10</span></td>
-                  <td class="days">
-                    <img
-                      src="/app/images/date_0.png"
-                      style="width: 20px; height: 20px"
-                    />
+                <tr v-for="(aptInfo, index) in aptDetails" :key="index">
+                  <td class="date2">
+                    <span class="mm"
+                      >{{ aptInfo.dealYear }}.{{ aptInfo.dealMonth }}</span
+                    >
+                  </td>
+                  <td class="">
+                    <span class="dd">{{ aptInfo.dealDay }}</span>
                   </td>
                   <td class="price taL crc co3" style="padding-left: 8px">
-                    <span class="b">월세</span
-                    ><span class="eb" style="padding-left: 8px; font-size: 15px"
-                      >4억 5,000/30</span
+                    <span class="b">매매</span
+                    ><span
+                      class="eb"
+                      style="padding-left: 8px; font-size: 15px"
+                      >{{ aptInfo.dealAmount }}</span
                     >
                   </td>
-                  <td><span class="mm">59A</span></td>
+                  <td>
+                    <span class="mm">{{ aptInfo.area }}</span>
+                  </td>
                   <td class="aptNum">
-                    <span class="aptdong">104동</span
-                    ><span class="aptfloor">21층</span>
-                  </td>
-                </tr>
-                <tr
-                  style=""
-                  onclick="clickPrice(this,20402255,1767,1500028,1509031,'6억 2,000','','105동','2층','22.1003')"
-                >
-                  <td class=""><span class="mm"></span></td>
-                  <td class=""><span class="dd">03</span></td>
-                  <td class="days">
-                    <img
-                      src="/app/images/date_14.png"
-                      style="width: 20px; height: 20px"
-                    />
-                  </td>
-                  <td class="price taL crc co2" style="padding-left: 8px">
-                    <span class="b">전세</span
-                    ><span class="eb" style="padding-left: 8px; font-size: 15px"
-                      >6억 2,000</span
-                    >
-                  </td>
-                  <td><span class="mm">59A</span></td>
-                  <td class="aptNum">
-                    <span class="aptdong">105동</span
-                    ><span class="aptfloor">2층</span>
-                  </td>
-                </tr>
-                <tr
-                  style=""
-                  onclick="clickPrice(this,20402255,1684,900049,908969,'1억 ','/138','103동','4층','22.0922')"
-                >
-                  <td class="date2"><span class="mm">22.09</span></td>
-                  <td class=""><span class="dd">22</span></td>
-                  <td class="days">
-                    <img
-                      src="/app/images/date_0.png"
-                      style="width: 20px; height: 20px"
-                    />
-                  </td>
-                  <td class="price taL crc co3" style="padding-left: 8px">
-                    <span class="b">월세</span
-                    ><span class="eb" style="padding-left: 8px; font-size: 15px"
-                      >1억 /138</span
-                    >
-                  </td>
-                  <td><span class="mm">59A</span></td>
-                  <td class="aptNum">
-                    <span class="aptdong">103동</span
-                    ><span class="aptfloor">4층</span>
-                  </td>
-                </tr>
-                <tr
-                  style=""
-                  onclick="clickPrice(this,20402255,1860,1800378,1809474,'2억 ','/170','106동','19층','22.0806')"
-                >
-                  <td class="date2"><span class="mm">22.08</span></td>
-                  <td class=""><span class="dd">06</span></td>
-                  <td class="days">
-                    <img
-                      src="/app/images/date_0.png"
-                      style="width: 20px; height: 20px"
-                    />
-                  </td>
-                  <td class="price taL crc co3" style="padding-left: 8px">
-                    <span class="b">월세</span
-                    ><span class="eb" style="padding-left: 8px; font-size: 15px"
-                      >2억 /170</span
-                    >
-                  </td>
-                  <td><span class="mm">59BC</span></td>
-                  <td class="aptNum">
-                    <span class="aptdong">106동</span
-                    ><span class="aptfloor">19층</span>
-                  </td>
-                </tr>
-                <tr
-                  style=""
-                  onclick="clickPrice(this,20402255,1791,1500196,1509223,'5억 7,000','','105동','8층','22.0723')"
-                >
-                  <td class="date2"><span class="mm">22.07</span></td>
-                  <td class=""><span class="dd">23</span></td>
-                  <td class="days">
-                    <img
-                      src="/app/images/date_0.png"
-                      style="width: 20px; height: 20px"
-                    />
-                  </td>
-                  <td class="price taL crc co2" style="padding-left: 8px">
-                    <span class="b">전세</span
-                    ><span class="eb" style="padding-left: 8px; font-size: 15px"
-                      >5억 7,000</span
-                    >
-                  </td>
-                  <td><span class="mm">59A</span></td>
-                  <td class="aptNum">
-                    <span class="aptdong">105동</span
-                    ><span class="aptfloor">8층</span>
-                  </td>
-                </tr>
-                <tr
-                  style=""
-                  onclick="clickPrice(this,20402255,1783,1500140,1509159,'5억 8,000','','105동','6층','22.0714')"
-                >
-                  <td class=""><span class="mm"></span></td>
-                  <td class=""><span class="dd">14</span></td>
-                  <td class="days">
-                    <img
-                      src="/app/images/date_0.png"
-                      style="width: 20px; height: 20px"
-                    />
-                  </td>
-                  <td class="price taL crc co2" style="padding-left: 8px">
-                    <span class="b">전세</span
-                    ><span class="eb" style="padding-left: 8px; font-size: 15px"
-                      >5억 8,000</span
-                    >
-                  </td>
-                  <td><span class="mm">59A</span></td>
-                  <td class="aptNum">
-                    <span class="aptdong">105동</span
-                    ><span class="aptfloor">6층</span>
-                  </td>
-                </tr>
-                <tr
-                  style=""
-                  onclick="clickPrice(this,20402255,1717,900280,909233,'6억 ','','103동','15층','22.0605')"
-                >
-                  <td class="date2"><span class="mm">22.06</span></td>
-                  <td class=""><span class="dd">05</span></td>
-                  <td class="days">
-                    <img
-                      src="/app/images/date_0.png"
-                      style="width: 20px; height: 20px"
-                    />
-                  </td>
-                  <td class="price taL crc co2" style="padding-left: 8px">
-                    <span class="b">전세</span
-                    ><span class="eb" style="padding-left: 8px; font-size: 15px"
-                      >6억
-                    </span>
-                  </td>
-                  <td><span class="mm">59A</span></td>
-                  <td class="aptNum">
-                    <span class="aptdong">103동</span
-                    ><span class="aptfloor">15층</span>
-                  </td>
-                </tr>
-                <tr
-                  style=""
-                  onclick="clickPrice(this,20402255,1721,900308,909265,'4억 6,200','','103동','16층','22.0603')"
-                >
-                  <td class=""><span class="mm"></span></td>
-                  <td class=""><span class="dd">03</span></td>
-                  <td class="days">
-                    <img
-                      src="/app/images/date_0.png"
-                      style="width: 20px; height: 20px"
-                    />
-                  </td>
-                  <td class="price taL crc co2" style="padding-left: 8px">
-                    <span class="b">전세</span
-                    ><span class="eb" style="padding-left: 8px; font-size: 15px"
-                      >4억 6,200</span
-                    >
-                  </td>
-                  <td><span class="mm">59BC</span></td>
-                  <td class="aptNum">
-                    <span class="aptdong">103동</span
-                    ><span class="aptfloor">16층</span>
-                  </td>
-                </tr>
-                <tr
-                  style=""
-                  onclick="clickPrice(this,20402255,1773,1200371,1209380,'2억 5,000','/100','104동','19층','22.0603')"
-                >
-                  <td class=""><span class="mm"></span></td>
-                  <td class=""><span class="dd">03</span></td>
-                  <td class="days">
-                    <img
-                      src="/app/images/date_0.png"
-                      style="width: 20px; height: 20px"
-                    />
-                  </td>
-                  <td class="price taL crc co3" style="padding-left: 8px">
-                    <span class="b">월세</span
-                    ><span class="eb" style="padding-left: 8px; font-size: 15px"
-                      >2억 5,000/100</span
-                    >
-                  </td>
-                  <td><span class="mm">59A</span></td>
-                  <td class="aptNum">
-                    <span class="aptdong">104동</span
-                    ><span class="aptfloor">19층</span>
+                    <span class="aptfloor">{{ aptInfo.floor }}층</span>
                   </td>
                 </tr>
               </tbody>
@@ -330,74 +134,15 @@
             >실거래가 표</a
           >
         </div>
-
-        <div class="type_area_wrap" style="z-index: 99999">
-          <div class="type_area">
-            <h2>차트 설정</h2>
-            <a onclick="closeMenu();" class="btn_close">차트 설정 닫기</a>
-
-            <h3 class="h3">종류</h3>
-            <ul class="type">
-              <li onclick="search2(this, '1')" id="selectM" class="on">
-                <span>매매</span>
-              </li>
-              <li onclick="search2(this, '2')" id="selectJ" class="on">
-                <span>전세</span>
-              </li>
-              <li onclick="search2(this, '3')" id="selectW" class="on">
-                <span>월세</span>
-              </li>
-              <li onclick="search2(this, '4')" id="selectG" class="on">
-                <span>건수</span>
-              </li>
-            </ul>
-            <h3 class="h3 select_py">평형선택</h3>
-            <ul class="area">
-              <li onclick="search3(0, '51', '22'); closeMenu();">
-                <div>
-                  <div id="m2_0" class="m2Div">
-                    <strong>22평</strong>
-                    <span>전용 51㎡</span>
-                  </div>
-                </div>
-              </li>
-
-              <li onclick="search3(1, '59', '25'); closeMenu();">
-                <div>
-                  <div id="m2_1" class="m2Div on">
-                    <strong>25평</strong>
-                    <span>전용 59㎡</span>
-                  </div>
-                </div>
-              </li>
-
-              <li onclick="search3(2, '84', '32'); closeMenu();">
-                <div>
-                  <div id="m2_2" class="m2Div">
-                    <strong>32평</strong>
-                    <span>전용 84㎡</span>
-                  </div>
-                </div>
-              </li>
-
-              <li onclick="search3(3, '84', '33'); closeMenu();">
-                <div>
-                  <div id="m2_3" class="m2Div">
-                    <strong>33평</strong>
-                    <span>전용 84㎡</span>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapMutations } from "vuex";
+import DealChart from "@/components/deal/DealChart.vue";
+
 const houseStore = "houseStore";
 
 export default {
@@ -408,93 +153,35 @@ export default {
   },
   // data() {
   //   return {
+  //     aptDetails: null,
+  //   };
+  // },
+  components: {
+    DealChart,
+  },
+  // data() {
+  //   return {
   //     code: this.code,
   //     apartName: this.apartName,
   //   };
   // },
-  mounted() {
-    console.log(this.code);
-    console.log(this.apartName);
-    this.getAptDetail({ aptCode: this.code });
+  computed: {
+    ...mapState(houseStore, ["aptDetails"]),
   },
+  // mounted() {
+  //   console.log("디테일 선언");
+  //   console.log(this.$store);
+  //   console.log(this.$store.state.houseStore.aptDetails);
+  //   this.aptDetails = this.$store.state.houseStore.aptDetails;
+  // },
   methods: {
-    ...mapActions(houseStore, ["getAptDetail"]),
+    ...mapMutations(houseStore, ["CLEAR_APT_DETAIL"]),
     close() {
+      // this.$store.state.houseStore.aptDetails = []; // clear_apt_detail
+      // console.log(this.$store.state.houseStore.aptDetails);
+      this.CLEAR_APT_DETAIL();
+      // console.log(this.$store.state.houseStore.aptDetails);
       this.$emit("close");
-    },
-    mapChart() {
-      var context = document.getElementById("myChart").getContext("2d");
-      var myChart = new Chart(context, {
-        type: "line", // 차트의 형태
-        data: {
-          // 차트에 들어갈 데이터
-          labels: [
-            //x 축
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-          ],
-          datasets: [
-            {
-              //데이터
-              label: "test1", //차트 제목
-              fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
-              data: [
-                21,
-                19,
-                25,
-                20,
-                23,
-                26,
-                25, //x축 label에 대응되는 데이터 값
-              ],
-              backgroundColor: [
-                //색상
-                "rgba(255, 99, 132, 0.2)",
-                "rgba(54, 162, 235, 0.2)",
-                "rgba(255, 206, 86, 0.2)",
-                "rgba(75, 192, 192, 0.2)",
-                "rgba(153, 102, 255, 0.2)",
-                "rgba(255, 159, 64, 0.2)",
-              ],
-              borderColor: [
-                //경계선 색상
-                "rgba(255, 99, 132, 1)",
-                "rgba(54, 162, 235, 1)",
-                "rgba(255, 206, 86, 1)",
-                "rgba(75, 192, 192, 1)",
-                "rgba(153, 102, 255, 1)",
-                "rgba(255, 159, 64, 1)",
-              ],
-              borderWidth: 1, //경계선 굵기
-            } /* ,
-                  {
-                      label: 'test2',
-                      fill: false,
-                      data: [
-                          8, 34, 12, 24
-                      ],
-                      backgroundColor: 'rgb(157, 109, 12)',
-                      borderColor: 'rgb(157, 109, 12)'
-                  } */,
-          ],
-        },
-        options: {
-          scales: {
-            yAxes: [
-              {
-                ticks: {
-                  beginAtZero: true,
-                },
-              },
-            ],
-          },
-        },
-      });
     },
   },
 };
@@ -502,9 +189,9 @@ export default {
 
 <style scoped lang="scss">
 .open-detail {
-  position: fixed;
+  position: absolute;
   margin: 0;
-  padding: 0;
+  padding: 0px 0px 0px 16px;
   height: 100%;
   width: 390px;
   left: 0;
@@ -515,7 +202,7 @@ export default {
     font-weight: bold;
   }
   .apt-name {
-    padding: 10px 10px 5px 10px;
+    padding: 10px 20px 5px 10px;
     border-top: solid 1px skyblue;
     display: flex;
     justify-content: space-between;
@@ -528,6 +215,27 @@ export default {
     border-top: solid 1px gray;
     height: 100%;
     overflow-y: scroll;
+  }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  tbody {
+    width: 100%;
+  }
+  thead th {
+    color: #fff;
+    font-size: 20px;
+    background: #5d5d5d;
+  }
+
+  thead tr th,
+  tbody tr td {
+    margin: 0;
+    padding: 6px;
+    border: solid 1px #e5e5e5;
   }
 }
 </style>
